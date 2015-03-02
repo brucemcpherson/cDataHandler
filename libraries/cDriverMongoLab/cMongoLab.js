@@ -8,7 +8,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverMongoLab',
-      version:'2.0.1',
+      version:'2.2.0',
       key:'MPAHw_-cHNDxsYAg263J7Fai_d-phDA33',
       description:'mongolab driver for dbabstraction',
       share:'https://script.google.com/d/11N6camwOikILS28dwqvIlv44D1y0JMCTL9IeeUKkDV1amGvjWIeg-KbH/edit?usp=sharing'
@@ -137,17 +137,48 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
    
    self.save = function (obs) {
 
+    // save it after adding my own id fields
+    var obd = obs.map(function(d) { 
+      var o = parentHandler.clone(d);
+      o._id = parentHandler.generateUniqueString() ; 
+      return o; 
+    });
+    
     // lock the entire transaction
     var result =  parentHandler.writeGuts ( 'save', function () {
-      // save it
       return self.execute (self.getEndPoint() , self.getOptions ({
         method: "POST",
-        payload: JSON.stringify (obs)
+        payload: JSON.stringify(obd)
       }));
     // the result property of the lock protect is the result of the function that was protected
    });
-   return parentHandler.makeResults (  handleCode, handleError, result);
+   return parentHandler.makeResults ( handleCode, handleError, obs , null , obd.map(function(d) { 
+     return getMixedId_(d);
+   }));
        
+  };
+
+  /**
+   * DriverMongoLab.removeByIds()
+   * @param {array.string} keys  list of keys to delete
+   * @return {object} results from selected handler
+   */   
+  self.removeByIds = function (keys) {
+
+    var options = self.getOptions({
+      method: "DELETE"
+    });
+    
+    var r = parentHandler.writeGuts ( 'removeByIds', function () {    
+      var dr = keys.map( function (d) {
+        return self.execute (self.getEndPoint(d) , options);
+      });
+      return dr;
+    });
+    
+   r.keys = keys;
+   return r;
+    
   };
 
   /**
@@ -172,14 +203,14 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
         payload: JSON.stringify(obs)
       });
         
-      var result =  parentHandler.writeGuts ( 'count', function () {
+      var result =  parentHandler.writeGuts ( 'remove', function () {
         return self.execute (self.getEndPoint() + makeQueryString_(queryOb) + makeParamString_(useParams) , options);
       });
     }
     return parentHandler.makeResults (  handleCode, handleError, result);
   };
    /**
-   * DriverMongoLab.remove()
+   * DriverMongoLab.count()
    * @param {object} queryOb some query object 
    * @param {object} queryParams additional query parameters (if available)
    * @return {object} results from selected handler
@@ -265,7 +296,7 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
                       driverId[k] = d[k];
                     }
                   }
-                  handleKeys.push(d._id.$oid);
+                  handleKeys.push(getMixedId_ (d) );
                   driverIds.push(driverId);
                   result.push(o);
                 }
@@ -283,7 +314,9 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
     
     return parentHandler.makeResults (handleCode,handleError,result,keepIds ? driverIds :null,keepIds ? handleKeys:null);
   };
-  
+  function getMixedId_ (ob) {
+    return parentHandler.isObject(ob._id) ? ob._id["$oid"] : ob._id; 
+  }
   function makeParamString_(ps) {
 
       // fix with mongo api equivalents
@@ -350,7 +383,8 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
    try {
      result = parentHandler.readGuts ( 'get', function () {
       return keys.map (function(d) {
-        var r = self.execute (self.getEndPoint(d)  , self.getOptions({
+        var k = parentHandler.isObject(d) ? d.key : d;
+        var r = self.execute (self.getEndPoint(k)  , self.getOptions({
           method: "GET"
         }));
         if (!r || r.length === 0) handleCode = enums.CODE.NOMATCH;
@@ -363,9 +397,25 @@ var DriverMongoLab = function (handler,collection,database,credentials) {
       handleCode =  enums.CODE.DRIVER;
     }
 
-    return parentHandler.makeResults (handleCode,handleError,result);
+    return self.splitKeys(parentHandler.makeResults (handleCode,handleError,result));
   };
   
+  /**
+   * DriverSheet.splitKeys()
+   * take a result and remove special fields and move handlekeys
+   * @param {object} qResult standard result
+   * @return {object} modified standard result
+   */
+  self.splitKeys = function (qResult) {
+    
+    if (qResult.handleCode >=0) {
+      var s = parentHandler.dropFields ( DRIVERFIELDS , '_id' , qResult.data);
+      qResult.data = s.obs;
+      qResult.handleKeys = s.keys;
+    }
+    
+    return qResult;
+  };
 
   /**
    * Driver.update()
