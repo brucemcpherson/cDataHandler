@@ -7,7 +7,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverOrchestrate',
-      version:'2.0.1',
+      version:'2.2.0',
       key:'MFOtcXFHPAtxy_lb6tkhrXKi_d-phDA33',
       share:'https://script.google.com/d/1flLc9GTC-0sQKv09zKfmxi7Mb8s32W3tEbW7bj1gmv5hKQFm0FlOBVT6/edit?usp=sharing',
       description:'db abstraction driver for orchestrate.io'
@@ -35,7 +35,7 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
   var handle = self;
   var keyOb = orchestrateOb;
   var handleError, handleCode; 
-  var SLEEPAFTER = 1000;
+  var WAITAFTER = 1000;
   
   self.getType = function () {
     return enums.DB.ORCHESTRATE;
@@ -209,7 +209,7 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
       handleError = err + "(query:" + JSON.stringify(params) + ")";
       handleCode =  enums.CODE.DRIVER;
     }
-    Logger.log(params);
+   
     return params;
   }
    /**
@@ -237,7 +237,7 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
         while (handleCode === enums.CODE.OK && (result.length < limit || limit ===0) && !exhausted) {
           params.offset = skip + result.length;
           url = self.getUrl(undefined,params); 
-          var chunk = self.execute (url, options);
+          var chunk = self.execute (url, options).data.result;
           exhausted = !chunk || (chunk.results.length === 0 );
           if(!exhausted) {
             chunk.results.forEach (function(d){
@@ -267,13 +267,36 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
   };
 
    /**
+   * DriverOrchestrate.removeByIds()
+   * @param {Array.string} keys to be removed 
+   * @return {object} results from selected handler
+   */
+  self.removeByIds = function (keys) {
+
+    return parentHandler.writeGuts ( 'removeByIds' , function() {
+
+      // delete them all by id
+      var options = self.getOptions({"method" : "DELETE"});
+      try {
+        keys.forEach(function(d) {
+          url = self.getUrl(d,{force:true});
+          return self.execute (url, options).data.result;
+        });
+        return parentHandler.makeResults(enums.CODE.OK, "",undefined,null, keys);
+      } 
+      catch(err) {
+        return parentHandler.makeResults(enums.CODE.DRIVER, JSON.stringify(err));
+      }
+    });
+  };
+  
+  
+   /**
    * DriverOrchestrate.remove()
    * @param {object} queryOb some query object 
    * @param {object} queryParams additional query parameters (if available)
    * @return {object} results from selected handler
    */
-   
-  
   self.remove = function (queryOb,queryParams) {
     
     return parentHandler.writeGuts ( 'remove' , function() {
@@ -293,11 +316,9 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
           if (queryResults.handleKeys) {
             result = queryResults.handleKeys.forEach(function(d) {
               url = self.getUrl(d,{force:true});
-              return self.execute (url, options);
+              return self.execute (url, options).data.result;
             });
           }
-          // changes to orchestrate are not immediately visible to later queries.. so wait a bit befor going back
-          Utilities.sleep(SLEEPAFTER);
         }
       }
       catch(err) {
@@ -311,34 +332,38 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
 
   
   self.execute = function (url,options) {
-    var result = parentHandler.rateLimitExpBackoff ( function () {
-
+    
+    var eResult , eHeaders ;
+    var hc = enums.CODE.OK, he ="",hk=[];
+    
+    return parentHandler.rateLimitExpBackoff ( function () {
+       
       var h = UrlFetchApp.fetch(url,options);
 
       if (h.getResponseCode() !== 201 && h.getResponseCode() !== 200 && h.getResponseCode() !== 204) {
-        handleCode = enums.CODE.HTTP;
-        handleError = h.getContentText() +"(http error code:" + h.getResponseCode()+ ")(url:" +url+")";
+        hc = enums.CODE.HTTP;
+        he = h.getContentText() +"(http error code:" + h.getResponseCode()+ ")(url:" +url+")";
       }
+      
+      // the response
       var t = h.getContentText();
-
       if (t) {
-        var o = JSON.parse(t);
-        if (o.message) {
-          handleCode = enums.CODE.DRIVER;
-          handleError = JSON.stringify(o.message);
-          return null;
+        eResult = JSON.parse(t);
+        if (eResult.message) {
+          hc = enums.CODE.DRIVER;
+          he = JSON.stringify(o.message);
         }
-        else { 
-          return o;
-        }
-      }
-      else {
-        return null;
       }
 
+      // the headers and get the key if there is one
+      eHeaders = h.getAllHeaders();
+      if (eHeaders && eHeaders.Location) {
+        hk.push(new RegExp ("\\/" + self.getTableName() + "\\/(\\w*)").exec(eHeaders.Location)[1]);
+      }
+      return parentHandler.makeResults (hc, he ,  {result:eResult, headers:eHeaders} , null , hk);
     });
+    
 
-    return result;
   }
   /**
    * DriverOrchestrate.save()
@@ -347,26 +372,36 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
    */
   self.save = function (obs) {
     
+    
     return parentHandler.writeGuts ( 'save' , function() {
-      var result =null,url = '';
+      var result =null,url = '',hk=[];
       handleError='', handleCode=enums.CODE.OK;
       
       try {
         var options = self.getOptions({"method" : "PUT"});
         result = obs.map (function(d) {
-          url = self.getUrl(self.generateKey());
-          options.payload =  JSON.stringify(d);
-          return self.execute (url, options);
+          if (handleCode === enums.CODE.OK) {
+            url = self.getUrl(self.generateKey());
+            options.payload =  JSON.stringify(d);
+            var e = self.execute (url, options);
+            // inherit status of save
+            if(handleCode === enums.CODE.OK) {
+              handleCode = e.handleCode;
+              handleError = e.handleError;
+            }
+            if (e.handleKeys && e.handleKeys.length)Array.prototype.push.apply(hk,e.handleKeys);
+            
+            return e.data.result;
+          }
         });
-        // changes to orchestrate are not immediately visible to later queries.. so wait a bit befor going back
-          Utilities.sleep(SLEEPAFTER);
+
       }
       catch(err) {
         handleError = err + "(query:" + url + ")";
         handleCode =  enums.CODE.DRIVER;
       }
       
-      return parentHandler.makeResults (handleCode,handleError,result);
+      return parentHandler.makeResults (handleCode,handleError,obs,null,hk);
     });
   };
  
@@ -389,7 +424,7 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
         var params = makeQuery(queryOb,queryParams);
         if (handleCode === enums.CODE.OK ) {
           url = self.getUrl(undefined,params); 
-          var chunk = self.execute (url, options);
+          var chunk = self.execute (url, options).data.result;
           result = [{count:chunk.total_count}];
         }
   
@@ -419,23 +454,31 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
   
   function getGuts_(keys) {
       var result,url;
-      handleError='', handleCode=enums.CODE.OK;
+      handleError='', handleCode=enums.CODE.OK,hk=[];
       try {
       
         var options = self.getOptions({"method" : "GET"});
-
-        result = (Array.isArray(keys) ? keys : [keys]).map(function(k) {
+        
+        result = (Array.isArray(keys) ? keys : [keys]).map(function(d) {
+          var k = parentHandler.isObject(d) ? d.key : d;
           url = self.getUrl (k);
-          return self.execute( url, options);
+          var t = self.execute( url, options);
+          if (t.handleKeys && t.handleKeys.length) { 
+            Array.prototype.push.apply(hk,t.handleKeys);
+          }
+          else {
+            hk.push(undefined);
+          }
+          return t.data.result;
         });
-
+       
       }
       catch(err) {
         handleError = err + "(query:" + url + ")";
         handleCode =  enums.CODE.DRIVER;
       }
-  
-      return parentHandler.makeResults (handleCode,handleError,result);
+
+      return parentHandler.makeResults (handleCode,handleError,result,null,keys);
   }
   /**
    * Driver.update()
@@ -465,9 +508,7 @@ var DriverOrchestrate = function (handler,tableName,id,orchestrateOb,accessToken
           handleError = err + "(query:" + url + ")";
           handleCode =  enums.CODE.DRIVER;
         }
-    
-        // changes to orchestrate are not immediately visible to later queries.. so wait a bit befor going back
-        Utilities.sleep(SLEEPAFTER);
+
         return parentHandler.makeResults (handleCode,handleError,result);
     });
   };
