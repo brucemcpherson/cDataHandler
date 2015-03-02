@@ -6,7 +6,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDataHandler',
-      version:'2.0.2',
+      version:'2.2.0',
       key:'Mj61W-201_t_zC9fJg1IzYiz3TLx7pV4j',
     },
     dependencies:[
