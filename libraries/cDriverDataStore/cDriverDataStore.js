@@ -15,7 +15,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverDataStore',
-      version:'2.0.0',
+      version:'2.0.1',
       key:'MPZF_EC6nOZFAjMRqCxEaUyz3TLx7pV4j',
       share:'https://script.google.com/d/1gKZkk4zuouPmIf1JYAFGTfCW0AmMtbL5eTohuLmcOE2WqIDxLudAMrxB/edit?usp=sharing',
       description:'cloud datastore driver for dbabstraction'
@@ -113,8 +113,7 @@ function queryGuts_(queryOb,queryParams,keepIds) {
   }
   
   result = handle.runQuery(queryOb,qp);
-  Logger.log('did query guts');
-  Logger.log(result);
+
   
   if (result.handleCode !== enums.CODE.OK) {
     return parentHandler.makeResults (result.handleCode,result.handleError);
