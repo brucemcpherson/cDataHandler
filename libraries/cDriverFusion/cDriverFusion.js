@@ -8,7 +8,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverFusion',
-      version:'2.0.2',
+      version:'2.2.0',
       key:'MyhWrchJeGiOowTfrMNidiSz3TLx7pV4j',
       description:'Fusion driver for dbabstraction',
       share:'https://script.google.com/d/1wPX-hMhaX_vk_3cAlZ4CUJ6GeNOsm2VrQpUqG4QU3GWeM45AVMiOU0OD/edit?usp=sharing'
@@ -264,6 +264,27 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
     return parentHandler.makeResults (handleCode,handleError,parentHandler.unFlatten(result),keepIds ? driverIds :null,keepIds ? handleKeys:null);
   };
   
+  self.removeByIds = function (keys) {
+
+    return parentHandler.writeGuts ( 'removeByIds' , function() {
+      
+      var result =null,sqlString='';
+      handleError='', handleCode=enums.CODE.OK;
+      try {
+        keys.forEach (function(d) {
+          sqlString = "DELETE FROM " + siloId + " WHERE ROWID = '" + d + "'";
+          result = parentHandler.rateLimitExpBackoff ( function () { 
+            return FusionTables.Query.sql(sqlString); }) ;
+        });
+      }
+      catch(err) {
+        handleError = JSON.stringify(err) + "(query:" + sqlString + ")";
+        handleCode =  enums.CODE.DRIVER;
+      }
+      return parentHandler.makeResults (handleCode,handleError,result);
+    });
+  };
+  
   self.remove = function (queryOb,queryParams) {
    
     return parentHandler.writeGuts ( 'remove' , function() {
@@ -370,7 +391,7 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
   
     return parentHandler.writeGuts ( 'save' , function() {
     
-      var result =null,q,chunk,sqlString = '';
+      var result =null,q,chunk,sqlString = '',hKeys=[];
       handleError='', handleCode=enums.CODE.OK;
 
       try {
@@ -402,7 +423,8 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
           
           // save it
           var  p=0;
-  
+
+
           while (p < q.length) {
     
             var chunk = [];
@@ -419,6 +441,8 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
             var r = parentHandler.rateLimitExpBackoff ( function () { 
               return FusionTables.Query.sql(sqlString); 
             } ) ;
+            //build up handle keys
+            r.rows.forEach(function(d) { hKeys.push(d[0])});
           }  
   
          // now we can delete the dummy column if it exists - we only needed it to create a table
@@ -432,7 +456,7 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
         handleError = err + "(query:" + sqlString + ")";
         handleCode =  enums.CODE.DRIVER;
       }
-      return parentHandler.makeResults (handleCode,handleError,result);
+      return parentHandler.makeResults (handleCode,handleError,obs,undefined,hKeys);
       
     });
   };
@@ -491,7 +515,8 @@ var DriverFusion = function (handler,tableId,title,fusionOb) {
       var data,hk =[],dk=[];
       // getting multiple in one get doesnt work with fusion, so we need a loop
       try {
-        data = (Array.isArray (key) ? key : [key]).map (function (d) {
+        data = (Array.isArray (key) ? key : [key]).map (function (k) {
+          var d = parentHandler.isObject(k) ? k.key : k;
           var result = self.query ({rowid:d},undefined, keepIds);
           if (handleCode !== enums.CODE.OK) {
             handleCode = result.handleCode;
