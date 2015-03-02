@@ -15,7 +15,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverParse',
-      version:'2.0.1',
+      version:'2.2.0',
       key:'Mhr42c9etIE-fQb2D9pwW0ai_d-phDA33',
       share:'https://script.google.com/d/17R_UVC7g6aWPGcQutcEK5e2o1YRJOXp2AA_qgv52qGcivryrEpiM_x9O/edit?usp=sharing',
       description:'parse.com abstraction library for apps script'
@@ -165,6 +165,43 @@ var DriverParse = function (handler,tableName,id,credentials) {
     
   };
   
+   /**
+   * DriverParse.removeByIds()
+   * @param {array.string} keys delete these
+   * @return {object} results from selected handler
+   */ 
+  self.removeByIds = function (keys) {
+    
+    return parentHandler.writeGuts ( 'removebyids', function () {
+    
+      var result =null;
+      handleError='', handleCode=enums.CODE.OK;
+      
+      try {
+        handle.batch(true);
+        var dr = keys.map ( function (k) { 
+          return handle.deleteObject (k) ; 
+        });
+        var w = handle.flush().batch(false);
+
+        if (!w.isOk()) {
+          handleError = w.browser().status();
+          handleCode =  enums.CODE.HTTP;
+        }
+        else {
+          result = w.jObject().results;
+        }
+      }
+
+      catch(err) {
+        handleError = err;
+        handleCode =  enums.CODE.DRIVER;
+      }
+      return parentHandler.makeResults (handleCode,handleError,result);
+    });
+    
+  };
+  
   self.constructParseError = function (parsecomOb) {
     var p = parsecomOb.getError();
     return parsecomOb.browser().status() + '(' + handle.status() + ') : ' + JSON.stringify(p);
@@ -180,26 +217,30 @@ var DriverParse = function (handler,tableName,id,credentials) {
     
       var result =null;
       handleError='', handleCode=enums.CODE.OK;
-  
+      var keys;
       try {
         handle.batch(true);
         obs.forEach(function(d) {
           handle.createObject(d);
         });
         var w = handle.flush().batch(false);
+
         if (!w.isOk()) {
           handleError = self.constructParseError (w) ;
           handleCode =  enums.CODE.HTTP;
         }
         else {
-          result = w.jObject().results;
+          var wob = w.jObject();
+          keys = wob.map(function(d) {
+            return d.success.objectId;
+          });
         }
       }
       catch(err) {
         handleError = err;
         handleCode =  enums.CODE.DRIVER;
       }
-      return parentHandler.makeResults (handleCode,handleError,result);
+      return parentHandler.makeResults (handleCode,handleError,obs,null,keys);
     });
     
   };
@@ -338,6 +379,22 @@ var DriverParse = function (handler,tableName,id,credentials) {
     });
   }
   /**
+   * DriverParse.splitKeys()
+   * take a result and remove special fields and move handlekeys
+   * @param {object} qResult standard result
+   * @return {object} modified standard result
+   */
+  self.splitKeys = function (qResult) {
+    
+    if (qResult.handleCode >=0) {
+      var s = parentHandler.dropFields ( DRIVERFIELDS , 'objectId' , qResult.data);
+      qResult.data = s.obs;
+      qResult.handleKeys = s.keys;
+    }
+    
+    return qResult;
+  };
+  /**
    * DriverParse.get()
    * @param {string} keys the unique return in handleKeys for this object
    * @param {boolean} keepIds whether or not to keep driver specifc ids in the results
@@ -353,7 +410,10 @@ var DriverParse = function (handler,tableName,id,credentials) {
       handleError='', handleCode=enums.CODE.OK
       
       try {
-        result = keys.map(function(k) {
+        result = keys.map(function(t) {
+          // ripdb handler passes an object
+          var k = parentHandler.isObject(t) ? t.key : t;
+          
           var w = handle.getObjectById(k);
           
           if (w.jObject().code === 101 ) {
@@ -364,13 +424,7 @@ var DriverParse = function (handler,tableName,id,credentials) {
             handleCode = enums.CODE.HTTP;
           }
           else {
-            var d = w.jObject();
-            return Object.keys(d).reduce(function(p,c){
-              if (DRIVERFIELDS.indexOf(c) === -1) {
-                p[c] = d[c];
-              }
-              return p;
-            },{});
+            return w.jObject();
           }
         });
       }
@@ -378,7 +432,7 @@ var DriverParse = function (handler,tableName,id,credentials) {
         handleError = err;
         handleCode =  enums.CODE.DRIVER;
       }
-      return parentHandler.makeResults (handleCode,handleError,result);
+      return self.splitKeys(parentHandler.makeResults (handleCode,handleError,result));
     });
   };
   
@@ -386,3 +440,5 @@ var DriverParse = function (handler,tableName,id,credentials) {
   return self;
   
 }
+
+
