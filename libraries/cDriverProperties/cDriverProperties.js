@@ -5,7 +5,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cDriverProperties',
-      version:'2.0.1',
+      version:'2.0.2',
       key:'MrpyO-B3fO-b1NG3LZ4UzaKi_d-phDA33',
       share:"https://script.google.com/d/17Nh1LJKElibaoj9EvpX9s1m_vMvOG2qJN24Le-W01wtRCqc1wdHWVonC/edit?usp=sharing",
       description:"properties driver for dbabstraction"
@@ -245,9 +245,18 @@ var DriverProperties = function (handler,keyName,id,PropertiesOb) {
   };
   
   self.getGuts = function (keys) {
-    return self.getMem().get ( key,keepIds,'row')
+    return self.getMem().get ( keys,true,'key')
   };
-
+  
+  /**
+   * DriverMemory.removeById()
+   * @param {string} keys key to remove
+   * @return {object} results from selected handler
+   */ 
+  self.removeByIds = function (keys) {
+    return delegate.removeByIds (keys,'key');
+  };
+  
    /**
    * DriverProperties.update()
    * @param {string} keys the unique return in handleKeys for this object
