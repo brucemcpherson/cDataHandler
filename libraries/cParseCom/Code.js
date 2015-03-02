@@ -5,7 +5,7 @@ function getLibraryInfo () {
   return {
     info: {
       name:'cParseCom',
-      version:'2.0.2',
+      version:'2.2.0',
       key:'MMaKU0wHrNShUwFypY3nM8iz3TLx7pV4j',
     },
     dependencies:[
