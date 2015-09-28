@@ -1,5 +1,5 @@
 # Google Apps Script Project: cDataHandler
-This repo (cDataHandler) was automatically updated on 15 September 2015 11:48:02 BST by GasGit
+This repo (cDataHandler) was automatically updated on 28 September 2015 17:43:16 BST by GasGit
 
 For more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/drivesdk/gettinggithubready "desktop liberation") or [contact me on G+](https://plus.google.com/+BruceMcpherson "Bruce McPherson - GDE")
 ## Details for Apps Script project cDataHandler
@@ -58,8 +58,6 @@ cDriverScratch| cDriverScratch|MTnrkatWa6Lrta8eAg6_H0qi_d-phDA33|10|no|[here](li
 cDriverDrive| cDriverDrive|Ma__4vH--nQ_FPsuNF1BFuyz3TLx7pV4j|12|no|[here](libraries/cDriverDrive "library source")
 cDriverDataStore| cDriverDataStore|MPZF_EC6nOZFAjMRqCxEaUyz3TLx7pV4j|6|no|[here](libraries/cDriverDataStore "library source")
 ### Enabled Google Services
-*library*|*identifier*|*version*
---- | --- | --- 
-Drive API| Drive|v2
+no libraries discovered
 ###Need more detail ?
 You can see [full project info as json here](info.json)
