@@ -1,5 +1,5 @@
 # Google Apps Script Project: cDataHandler
-This repo (cDataHandler) was automatically updated on 27 July 2016 10:38:27 BST by GasGit
+This repo (cDataHandler) was automatically updated on 31 October 2018 11:37:50 GMT by GasGit
 
 For more information see the [desktop liberation site](http://ramblings.mcpher.com/Home/excelquirks/drivesdk/gettinggithubready "desktop liberation") or [contact me on G+](https://plus.google.com/+BruceMcpherson "Bruce McPherson - GDE")
 ## Details for Apps Script project cDataHandler
@@ -12,52 +12,55 @@ The shared link for [cDataHandler is here](https://script.google.com/d/1jw6jaQaC
 cDataHandler| server_js
 constants| server_js
 forPublishing| server_js
+appsscript| json
 ### Directly referenced libraries
 *library*|*identifier*|*key*|*version*|*dev mode*|*source*|
 --- | --- | --- | --- | --- | --- 
-cFlatten| cFlatten|MqxKdBrlw18FDd-X5zQLd7yz3TLx7pV4j|8|no|[here](libraries/cFlatten "library source")
-cDriverDataStore| cDriverDataStore|MPZF_EC6nOZFAjMRqCxEaUyz3TLx7pV4j|6|no|[here](libraries/cDriverDataStore "library source")
-cDriverDrive| cDriverDrive|Ma__4vH--nQ_FPsuNF1BFuyz3TLx7pV4j|12|no|[here](libraries/cDriverDrive "library source")
-cDriverScratch| cDriverScratch|MTnrkatWa6Lrta8eAg6_H0qi_d-phDA33|10|no|[here](libraries/cDriverScratch "library source")
-cCacheHandler| cCacheHandler|M3reA5eBxtwxSqCEgPywb9ai_d-phDA33|13|no|[here](libraries/cCacheHandler "library source")
-cParseCom| cParseCom|MMaKU0wHrNShUwFypY3nM8iz3TLx7pV4j|16|no|[here](libraries/cParseCom "library source")
-cDriverMemory| cDriverMemory|M96uVZRXXG_RY3c2at9V6tSz3TLx7pV4j|10|no|[here](libraries/cDriverMemory "library source")
-cDriverProperties| cDriverProperties|MrpyO-B3fO-b1NG3LZ4UzaKi_d-phDA33|11|no|[here](libraries/cDriverProperties "library source")
-cDriverImportio| cDriverImportio|MJWmIWvhOOsv401piLKzeNai_d-phDA33|3|no|[here](libraries/cDriverImportio "library source")
-cDriverScriptDB| cDriverScriptDB|MQS7yEChG0mh1Ucf_UhV-vKi_d-phDA33|2|no|[here](libraries/cDriverScriptDB "library source")
-cDriverSheet| cDriverSheet|Mrckbr9_w7PCphJtOzhzA_Cz3TLx7pV4j|11|no|[here](libraries/cDriverSheet "library source")
-cNamedLock| cNamedLock|Mpv7vUR0126U53sfSMXsAPai_d-phDA33|12|no|[here](libraries/cNamedLock "library source")
-cDriverOrchestrate| cDriverOrchestrate|MFOtcXFHPAtxy_lb6tkhrXKi_d-phDA33|5|no|[here](libraries/cDriverOrchestrate "library source")
-cDbAbstraction| cDbAbstraction|MHfCjPQlweartW45xYs6hFai_d-phDA33|37|no|[here](libraries/cDbAbstraction "library source")
-cDriverFusion| cDriverFusion|MyhWrchJeGiOowTfrMNidiSz3TLx7pV4j|8|no|[here](libraries/cDriverFusion "library source")
-cUAMeasure| cUAMeasure|MIHfxr-fc_7bXa1l0Dkk0oqi_d-phDA33|6|no|[here](libraries/cUAMeasure "library source")
-cDriverMongoLab| cDriverMongoLab|MPAHw_-cHNDxsYAg263J7Fai_d-phDA33|6|no|[here](libraries/cDriverMongoLab "library source")
-cDriverParse| cDriverParse|Mhr42c9etIE-fQb2D9pwW0ai_d-phDA33|9|no|[here](libraries/cDriverParse "library source")
+cFlatten| cFlatten|12actArnmhP0hZTQng9Ysav1ZA3xfrkm1JA024mxDx4x4MEcPlc8Y2YDY|8|no|[here](libraries/cFlatten "library source")
+cDriverOrchestrate| cDriverOrchestrate|1flLc9GTC-0sQKv09zKfmxi7Mb8s32W3tEbW7bj1gmv5hKQFm0FlOBVT6|5|no|[here](libraries/cDriverOrchestrate "library source")
+cDriverParse| cDriverParse|17R_UVC7g6aWPGcQutcEK5e2o1YRJOXp2AA_qgv52qGcivryrEpiM_x9O|9|no|[here](libraries/cDriverParse "library source")
+cDbAbstraction| cDbAbstraction|1Ddsb4Y-QDUqcw9Fa-rJKM3EhG2caosS9Nhch7vnQWXP7qkaMmb1wjmTl|37|no|[here](libraries/cDbAbstraction "library source")
+cDriverFusion| cDriverFusion|1wPX-hMhaX_vk_3cAlZ4CUJ6GeNOsm2VrQpUqG4QU3GWeM45AVMiOU0OD|8|no|[here](libraries/cDriverFusion "library source")
+cDriverDrive| cDriverDrive|1ss0gwqczeLddH0pqwzB-VntGbMZzEh3DgUMwCpMYAhTGqXJFkZzBihd4|12|no|[here](libraries/cDriverDrive "library source")
+cDriverImportio| cDriverImportio|11UsgyCR8CNL1pMgbiqaxvFluQA7NxJvHLpdskERfpwap22JlEdZNjUAU|3|no|[here](libraries/cDriverImportio "library source")
+cDriverSheet| cDriverSheet|18fvqHqSs2YwU2ZMUcx6-9GE30u6i663rZTz7K0xNsStHoiJcs487JvN-|11|no|[here](libraries/cDriverSheet "library source")
+cDriverScriptDB| cDriverScriptDB|14BJai1S2S7393xowROUEu7IawN5hV9Sp_ry9RmhQpUcK3fh9bwz88Gn2|2|no|[here](libraries/cDriverScriptDB "library source")
+cDriverDataStore| cDriverDataStore|1gKZkk4zuouPmIf1JYAFGTfCW0AmMtbL5eTohuLmcOE2WqIDxLudAMrxB|6|no|[here](libraries/cDriverDataStore "library source")
+cDriverMemory| cDriverMemory|101pVFakzEfvHquUFOmZafAzfBAGSotgH56IqVcGmWNBu7J0sweklqyCB|10|no|[here](libraries/cDriverMemory "library source")
+cParseCom| cParseCom|17Og7-oAPxubIB38lXSniOMcMWkH9I9FxOaLIeIeAACg__QaVxld-UHIb|16|no|[here](libraries/cParseCom "library source")
+cDriverProperties| cDriverProperties|17Nh1LJKElibaoj9EvpX9s1m_vMvOG2qJN24Le-W01wtRCqc1wdHWVonC|11|no|[here](libraries/cDriverProperties "library source")
+cUAMeasure| cUAMeasure|17gzIYCpQ_8jN8rR1mQ8POa5VS5C4TYTiDuEIlpEMQmRGe2S51MvKf2LO|6|no|[here](libraries/cUAMeasure "library source")
+cDriverMongoLab| cDriverMongoLab|11N6camwOikILS28dwqvIlv44D1y0JMCTL9IeeUKkDV1amGvjWIeg-KbH|6|no|[here](libraries/cDriverMongoLab "library source")
+cDriverScratch| cDriverScratch|1ka9ODRxrUKUOTnuv4CkL9QnBTjkrXQhP0yJF-R2wjVz-qVdEK9G2S9sH|10|no|[here](libraries/cDriverScratch "library source")
+cNamedLock| cNamedLock|1uNcsHIUpZOJIT_ZedTa2mBE_gqCo0mH5OrNJMk4NWdyCNHQfiQjYXZ6u|12|no|[here](libraries/cNamedLock "library source")
+cCacheHandler| cCacheHandler|1U6j9t_3ONTbhTCvhjwANMcEXeHXr4shgzTG0ZrRnDYLcFl3_IH2b2eAY|13|no|[here](libraries/cCacheHandler "library source")
 ### All dependencies and sub dependencies
 *library*|*identifier*|*key*|*version*|*dev mode*|*source*|
 --- | --- | --- | --- | --- | --- 
-cFlatten| cFlatten|MqxKdBrlw18FDd-X5zQLd7yz3TLx7pV4j|8|no|[here](libraries/cFlatten "library source")
-cDriverDataStore| cDriverDataStore|MPZF_EC6nOZFAjMRqCxEaUyz3TLx7pV4j|6|no|[here](libraries/cDriverDataStore "library source")
-cDriverDrive| cDriverDrive|Ma__4vH--nQ_FPsuNF1BFuyz3TLx7pV4j|12|no|[here](libraries/cDriverDrive "library source")
-cDelegateMemory| cDelegateMemory|MyIN8WHN1Uf3EG-obHsjrAyz3TLx7pV4j|10|no|[here](libraries/cDelegateMemory "library source")
-cDriverMemory| cDriverMemory|M96uVZRXXG_RY3c2at9V6tSz3TLx7pV4j|11|no|[here](libraries/cDriverMemory "library source")
-cUseful| cUseful|Mcbr-v4SsYKJP7JMohttAZyz3TLx7pV4j|25|no|[here](libraries/cUseful "library source")
-cDriverScratch| cDriverScratch|MTnrkatWa6Lrta8eAg6_H0qi_d-phDA33|10|no|[here](libraries/cDriverScratch "library source")
-cCacheHandler| cCacheHandler|M3reA5eBxtwxSqCEgPywb9ai_d-phDA33|13|no|[here](libraries/cCacheHandler "library source")
-cParseCom| cParseCom|MMaKU0wHrNShUwFypY3nM8iz3TLx7pV4j|16|no|[here](libraries/cParseCom "library source")
-cDriverProperties| cDriverProperties|MrpyO-B3fO-b1NG3LZ4UzaKi_d-phDA33|11|no|[here](libraries/cDriverProperties "library source")
-cDriverImportio| cDriverImportio|MJWmIWvhOOsv401piLKzeNai_d-phDA33|3|no|[here](libraries/cDriverImportio "library source")
-importio| importio|M2ZyMvVZdgKdy3SaLP8gq3X797_hv7HHb|3|no|no
-cDriverScriptDB| cDriverScriptDB|MQS7yEChG0mh1Ucf_UhV-vKi_d-phDA33|2|no|[here](libraries/cDriverScriptDB "library source")
-cDriverSheet| cDriverSheet|Mrckbr9_w7PCphJtOzhzA_Cz3TLx7pV4j|11|no|[here](libraries/cDriverSheet "library source")
-cNamedLock| cNamedLock|Mpv7vUR0126U53sfSMXsAPai_d-phDA33|12|no|[here](libraries/cNamedLock "library source")
-cDriverOrchestrate| cDriverOrchestrate|MFOtcXFHPAtxy_lb6tkhrXKi_d-phDA33|5|no|[here](libraries/cDriverOrchestrate "library source")
-cDbAbstraction| cDbAbstraction|MHfCjPQlweartW45xYs6hFai_d-phDA33|37|no|[here](libraries/cDbAbstraction "library source")
-cUAMeasure| cUAMeasure|MIHfxr-fc_7bXa1l0Dkk0oqi_d-phDA33|6|no|[here](libraries/cUAMeasure "library source")
-cDriverFusion| cDriverFusion|MyhWrchJeGiOowTfrMNidiSz3TLx7pV4j|8|no|[here](libraries/cDriverFusion "library source")
-cDriverMongoLab| cDriverMongoLab|MPAHw_-cHNDxsYAg263J7Fai_d-phDA33|6|no|[here](libraries/cDriverMongoLab "library source")
-cDriverParse| cDriverParse|Mhr42c9etIE-fQb2D9pwW0ai_d-phDA33|9|no|[here](libraries/cDriverParse "library source")
+cFlatten| cFlatten|12actArnmhP0hZTQng9Ysav1ZA3xfrkm1JA024mxDx4x4MEcPlc8Y2YDY|8|no|[here](libraries/cFlatten "library source")
+cDriverOrchestrate| cDriverOrchestrate|1flLc9GTC-0sQKv09zKfmxi7Mb8s32W3tEbW7bj1gmv5hKQFm0FlOBVT6|5|no|[here](libraries/cDriverOrchestrate "library source")
+cDriverParse| cDriverParse|17R_UVC7g6aWPGcQutcEK5e2o1YRJOXp2AA_qgv52qGcivryrEpiM_x9O|9|no|[here](libraries/cDriverParse "library source")
+cParseCom| cParseCom|17Og7-oAPxubIB38lXSniOMcMWkH9I9FxOaLIeIeAACg__QaVxld-UHIb|16|no|[here](libraries/cParseCom "library source")
+cUseful| cUseful|1EbLSESpiGkI3PYmJqWh3-rmLkYKAtCNPi1L2YCtMgo2Ut8xMThfJ41Ex|25|no|[here](libraries/cUseful "library source")
+cDbAbstraction| cDbAbstraction|1Ddsb4Y-QDUqcw9Fa-rJKM3EhG2caosS9Nhch7vnQWXP7qkaMmb1wjmTl|37|no|[here](libraries/cDbAbstraction "library source")
+cNamedLock| cNamedLock|1uNcsHIUpZOJIT_ZedTa2mBE_gqCo0mH5OrNJMk4NWdyCNHQfiQjYXZ6u|15|no|[here](libraries/cNamedLock "library source")
+cCacheHandler| cCacheHandler|1U6j9t_3ONTbhTCvhjwANMcEXeHXr4shgzTG0ZrRnDYLcFl3_IH2b2eAY|15|no|[here](libraries/cCacheHandler "library source")
+cUAMeasure| cUAMeasure|17gzIYCpQ_8jN8rR1mQ8POa5VS5C4TYTiDuEIlpEMQmRGe2S51MvKf2LO|6|no|[here](libraries/cUAMeasure "library source")
+cDriverFusion| cDriverFusion|1wPX-hMhaX_vk_3cAlZ4CUJ6GeNOsm2VrQpUqG4QU3GWeM45AVMiOU0OD|8|no|[here](libraries/cDriverFusion "library source")
+cDriverDrive| cDriverDrive|1ss0gwqczeLddH0pqwzB-VntGbMZzEh3DgUMwCpMYAhTGqXJFkZzBihd4|12|no|[here](libraries/cDriverDrive "library source")
+cDelegateMemory| cDelegateMemory|1vTqRouwf8VVyz9lSdqMBhfuqUM0po3GQCwfjbTlCqOKB2QjGAFbum0dL|12|no|[here](libraries/cDelegateMemory "library source")
+cDriverMemory| cDriverMemory|101pVFakzEfvHquUFOmZafAzfBAGSotgH56IqVcGmWNBu7J0sweklqyCB|12|no|[here](libraries/cDriverMemory "library source")
+cDriverImportio| cDriverImportio|11UsgyCR8CNL1pMgbiqaxvFluQA7NxJvHLpdskERfpwap22JlEdZNjUAU|3|no|[here](libraries/cDriverImportio "library source")
+importio| importio|1H6pxRzqW-UxW4Ihdd8XfmpIwU1qPyRxzVw0AkLE5_hfHMGVhwk4O4atu|3|no|no
+cDriverSheet| cDriverSheet|18fvqHqSs2YwU2ZMUcx6-9GE30u6i663rZTz7K0xNsStHoiJcs487JvN-|11|no|[here](libraries/cDriverSheet "library source")
+cDriverScriptDB| cDriverScriptDB|14BJai1S2S7393xowROUEu7IawN5hV9Sp_ry9RmhQpUcK3fh9bwz88Gn2|2|no|[here](libraries/cDriverScriptDB "library source")
+cDriverDataStore| cDriverDataStore|1gKZkk4zuouPmIf1JYAFGTfCW0AmMtbL5eTohuLmcOE2WqIDxLudAMrxB|6|no|[here](libraries/cDriverDataStore "library source")
+cDriverProperties| cDriverProperties|17Nh1LJKElibaoj9EvpX9s1m_vMvOG2qJN24Le-W01wtRCqc1wdHWVonC|11|no|[here](libraries/cDriverProperties "library source")
+cDriverMongoLab| cDriverMongoLab|11N6camwOikILS28dwqvIlv44D1y0JMCTL9IeeUKkDV1amGvjWIeg-KbH|6|no|[here](libraries/cDriverMongoLab "library source")
+cDriverScratch| cDriverScratch|1ka9ODRxrUKUOTnuv4CkL9QnBTjkrXQhP0yJF-R2wjVz-qVdEK9G2S9sH|10|no|[here](libraries/cDriverScratch "library source")
 ### Enabled Google Services
 no libraries discovered
-###Need more detail ?
+### Scopes required
+no scopes discovered
+### Need more detail ?
 You can see [full project info as json here](info.json)
